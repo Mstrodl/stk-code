@@ -70,7 +70,9 @@
 #include <sys/types.h>		/* FD_SETSIZE socklen_t */
 #include <sys/select.h>		/* FD_ZERO FD_SET fd_set select(2) */
 #include <sys/socket.h>		/* AF_INET AF_INET6 AF_UNIX struct sockaddr struct sockaddr_in struct sockaddr_in6 socket(2) */
-#if defined(AF_UNIX)
+#ifdef __SWITCH__
+#include <sys/socket.h>
+#elif defined(AF_UNIX)
 #include <sys/un.h>		/* struct sockaddr_un */
 #endif
 #include <fcntl.h>		/* F_SETFD F_GETFL F_SETFL O_NONBLOCK fcntl(2) */
@@ -9322,7 +9324,7 @@ enum dns_rcode dns_ircode(const char *name) {
 #include <getopt.h>
 #endif
 
-#if !_WIN32
+#if !_WIN32 && !defined(__SWITCH__)
 #include <err.h>
 #endif
 
@@ -9389,7 +9391,7 @@ DNS_NORETURN static void panic(const char *fmt, ...) {
 	vfprintf(stderr, fmt, ap);
 
 	exit(EXIT_FAILURE);
-#else
+#elif !defined(__SWITCH__)
 	verrx(EXIT_FAILURE, fmt, ap);
 #endif
 } /* panic() */
