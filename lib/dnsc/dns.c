@@ -853,7 +853,7 @@ DNS_NOTUSED static size_t dns_strnlcpy(char *dst, size_t lim, const char *src, s
 } /* dns_strnlcpy() */
 
 
-#if (defined AF_UNIX && !defined _WIN32)
+#if (defined AF_UNIX && !defined _WIN32 && !defined(__SWITCH__))
 #define DNS_HAVE_SOCKADDR_UN 1
 #else
 #define DNS_HAVE_SOCKADDR_UN 0
