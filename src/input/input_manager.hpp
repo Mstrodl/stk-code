@@ -36,6 +36,7 @@
 
 class DeviceManager;
 class SDLController;
+class SwitchPad;
 
 /**
   * \brief Class to handle input.
@@ -79,6 +80,9 @@ private:
                         Input::AxisDirection axisDirection,  int value);
 
 #ifndef SERVER_ONLY
+#ifdef __SWITCH__
+    SwitchPad* m_switch_pads[10];
+#endif
     std::map<int, std::unique_ptr<SDLController> > m_sdl_controller;
 #endif
 

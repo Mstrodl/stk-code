@@ -54,6 +54,8 @@
 #include "utils/string_utils.hpp"
 #include "utils/translation.hpp"
 
+#include "input/switch_pad.hpp"
+
 #include <ISceneManager.h>
 #include <ICameraSceneNode.h>
 #include <ISceneNode.h>
@@ -95,6 +97,8 @@ InputManager::InputManager() : m_mode(BOOTSTRAP),
             SDL_GetError());
     }
 #ifdef __SWITCH__
+    padConfigureInput(8, HidNpadStyleSet_NpadStandard);
+
     // Otherwise we report 'B' as 'A' (like Xbox controller)
     SDL_SetHint(SDL_HINT_GAMECONTROLLER_USE_BUTTON_LABELS, "0");
 #endif
@@ -104,7 +108,15 @@ InputManager::InputManager() : m_mode(BOOTSTRAP),
 // -----------------------------------------------------------------------------
 void InputManager::addJoystick()
 {
-#ifndef SERVER_ONLY
+#ifdef __SWITCH__
+    if (m_switch_pads[0] != nullptr)
+    {
+        for (int i = 0; i < 10; ++i)
+        {
+            m_switch_pads[i] = new SwitchPad(this, i);
+        }
+    }
+#elif defined(SERVER_ONLY)
     // When irrlicht device is reinitialized the joystick added event may be
     // lost, we look for them and add it back
     for (int i = 0; i < SDL_NumJoysticks(); i++)
@@ -205,6 +217,15 @@ void InputManager::update(float dt)
 #ifdef ENABLE_WIIUSE
     if (wiimote_manager)
         wiimote_manager->update();
+#endif
+
+#ifdef __SWITCH__
+    hidSetNpadJoyHoldType(HidNpadJoyHoldType_Horizontal);
+    for(int i = 0; i < 10; ++i)
+    {
+        if (m_switch_pads[i] != nullptr)
+            m_switch_pads[i]->update();
+    }
 #endif
 
     for (auto it = m_gamepads_timer.begin(); it != m_gamepads_timer.end();)
