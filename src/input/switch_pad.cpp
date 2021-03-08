@@ -14,6 +14,8 @@ enum ButtonTypes {
     BUTTON_B,
     BUTTON_X,
     BUTTON_Y,
+    BUTTON_ZL,
+    BUTTON_ZR,
     BUTTON_L,
     BUTTON_R,
     BUTTON_MINUS,
@@ -109,6 +111,8 @@ void SwitchPad::update() {
     ADD_BUTTON(HidNpadButton_Y, BUTTON_Y);
     ADD_BUTTON(HidNpadButton_L, BUTTON_L);
     ADD_BUTTON(HidNpadButton_R, BUTTON_R);
+    ADD_BUTTON(HidNpadButton_ZL, BUTTON_ZL);
+    ADD_BUTTON(HidNpadButton_ZR, BUTTON_ZR);
     
     ADD_BUTTON(HidNpadButton_AnyLeft, BUTTON_LEFT);
     ADD_BUTTON(HidNpadButton_AnyUp, BUTTON_UP);
